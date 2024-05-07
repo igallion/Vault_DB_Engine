@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask_blog_deployment
+  labels:
+    app: flask_blog
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask_blog
+  template:
+    metadata:
+      labels:
+        app: flask_blog
+    spec:
+      containers:
+      - name: flask_blog
+        image: flask_blog:1.7
+        ports:
+        - containerPort: 80
+        env:
+          - name: VAULT_ADDR
+            valueFrom:
+              configMapKeyRef:
+                name: flask_blog_config
+                key: vault-url
+          - name: VAULT_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: vault-secret
+                key: vault-token
+          - name: MONGO_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: flask_blog_config
+              key: mongo-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask_blog_service
+spec:
+  type: NodePort
+  selector:
+    app: flask_blog
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30100

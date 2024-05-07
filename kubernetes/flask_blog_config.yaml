@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flask_blog_config
+data:
+  mongo-url: mongo-service
+  vault-url: vault-service
+  vault-addr: http://0.0.0.0:8200
+  vault-config: /vault/config/vault-config.json
