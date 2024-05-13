@@ -3,6 +3,15 @@ services:
   myubuntu:
     image: myubuntu:1.1
     container_name: my_ubuntu
+    depends_on:
+      - vault_server_demo
+    volumes:
+      - ./ubuntu_init:/usr/local/bin/ubuntu_init
+    secrets:
+      - VAULT_CLUSTER_INFO
+    environment:
+      VAULT_ADDR: http://vault_server_demo:8200
+    command: /bin/bash -c "sleep 10 && /usr/local/bin/ubuntu_init/ubuntu_init.sh"
   vault:
     image: hashicorp/vault:1.16
     container_name: vault_server_demo
@@ -41,7 +50,7 @@ volumes:
   vault_data_volume:
 
 secrets:
-  VAULT_TOKEN:
-    file: ./.secrets/vault_token.txt
+  VAULT_CLUSTER_INFO:
+    file: ./.secrets/VAULT_CLUSTER_INFO.json
   mssql_sa_password:
     file: ./.secrets/mssql_sa_password.txt
