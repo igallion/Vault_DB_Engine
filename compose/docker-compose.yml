@@ -1,10 +1,10 @@
 version: "3"
 services:
   myubuntu:
-    image: myubuntu:1.1
+    image: my_ubuntu:1.2
     container_name: my_ubuntu
     depends_on:
-      - vault_server_demo
+      - vault
     volumes:
       - ./ubuntu_init:/usr/local/bin/ubuntu_init
     secrets:
