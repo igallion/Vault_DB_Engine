@@ -16,3 +16,5 @@ elif [[ "$SEALED" == "false" ]]; then
 else
     echo "Unexpected value for SEALED: '$SEALED'"
 fi
+
+tail -f /dev/null
