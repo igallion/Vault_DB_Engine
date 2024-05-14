@@ -3,6 +3,6 @@ compose/.secrets
 test
 .DS_Store
 kubernetes/.secrets
-terraform/terraform.tfstate
 terraform/.terraform
 terraform/.terraform.lock.hcl
+terraform/terraform.tfstate*
