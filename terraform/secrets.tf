@@ -15,7 +15,7 @@ resource "vault_database_secret_backend_connection" "mssql" {
   allowed_roles     = ["mssql-role"]
 
   mssql {
-    connection_url          = "sqlserver://{{username}}:{{password}}@localhost/mssql_vault_server_demo:1433/Test_database?TrustServerCertificate=True"
+    connection_url          = "sqlserver://{{username}}:{{password}}@mssql_vault_server_demo"
     max_open_connections    = 5
     max_idle_connections    = 3
     max_connection_lifetime = 5
@@ -31,9 +31,10 @@ resource "vault_database_secret_backend_role" "mssql-role" {
   db_name = vault_database_secret_backend_connection.mssql.name
 
   creation_statements = [
+    "USE [Test_database]",
     "CREATE LOGIN [{{name}}] WITH PASSWORD = '{{password}}';",
     "CREATE USER [{{name}}] FOR LOGIN [{{name}}];",
-    "GRANT SELECT ON SCHEMA::dbo TO [{{name}}];"
+    "EXEC sp_addrolemember db_datareader, [{{name}}];"
   ]
   #1 hour
   default_ttl = 3600

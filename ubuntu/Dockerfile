@@ -13,7 +13,7 @@ RUN apt-get update \
     && ACCEPT_EULA=Y apt-get install -y mssql-tools18
 
 RUN wget https://releases.hashicorp.com/vault/1.16.2/vault_1.16.2_linux_amd64.zip \
-    && unzip vault_1.16.2_linux_amd64.zip
+    && unzip vault_1.16.2_linux_amd64.zip -d /usr/local/bin/
 
 # Optional: Add SQLCMD to the PATH
 ENV PATH="$PATH:/opt/mssql-tools18/bin"

@@ -5,27 +5,30 @@ services:
     container_name: my_ubuntu
     depends_on:
       - vault
+      - mssql
     volumes:
       - ./ubuntu_init:/usr/local/bin/ubuntu_init
     secrets:
       - VAULT_CLUSTER_INFO
     environment:
       VAULT_ADDR: http://vault_server_demo:8200
-    command: /bin/bash -c "sleep 10 && /usr/local/bin/ubuntu_init/ubuntu_init.sh"
+      SQL_USER: sa
+      MSSQL_SA_PASSWORD: MyStrongPassword10
+    command: /bin/bash -c "echo 'Initializing Demo' && sleep 15 && /usr/local/bin/ubuntu_init/ubuntu_init.sh"
   vault:
     image: hashicorp/vault:1.16
     container_name: vault_server_demo
     ports:
       - "8200:8200/tcp"
-    volumes:
-      - ./vaultConfig:/vault/config # Bind mount for configuration
-      - vault_data_volume:/vault/file # Named volume for Vault data
+    #volumes:
+    #  - ./vaultConfig:/vault/config # Bind mount for configuration
+    #  - vault_data_volume:/vault/file # Named volume for Vault data
     environment:
-      VAULT_LOCAL_CONFIG: /vault/config/vault-config.json
+      #VAULT_LOCAL_CONFIG: /vault/config/vault-config.json
       VAULT_ADDR: http://0.0.0.0:8200
     cap_add:
       - IPC_LOCK
-    entrypoint: "vault server -config=/vault/config/vault-config.json"
+    entrypoint: "vault server -dev -dev-root-token-id=123 -dev-listen-address=0.0.0.0:8200"
     restart: unless-stopped
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -47,7 +50,7 @@ services:
 volumes:
   vault-mssql-data-2022:
     driver: local
-  vault_data_volume:
+  #vault_data_volume:
 
 secrets:
   VAULT_CLUSTER_INFO:
