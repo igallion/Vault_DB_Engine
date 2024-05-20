@@ -1,5 +1,17 @@
 version: "3"
 services:
+  sqlapp:
+    image: sql-app:1.0
+    container_name: sql-app
+    depends_on:
+      - vault
+      - mssql
+      - myubuntu
+    environment:
+      DB_SERVER: mssql_vault_server_demo
+      DB_DATABASE: Test_database
+      DB_SA_USER: sa
+      DB_SA_PASSWORD: MyStrongPassword10
   myubuntu:
     image: my_ubuntu:1.2
     container_name: my_ubuntu

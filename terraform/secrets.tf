@@ -36,8 +36,8 @@ resource "vault_database_secret_backend_role" "mssql-role" {
     "CREATE USER [{{name}}] FOR LOGIN [{{name}}];",
     "EXEC sp_addrolemember db_datareader, [{{name}}];"
   ]
-  #1 hour
-  default_ttl = 3600
-  #1 day
-  max_ttl = 86400
+  #90 Seconds
+  default_ttl = 5
+  #90 Seconds
+  max_ttl = 10
 }

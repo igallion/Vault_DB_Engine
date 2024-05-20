@@ -1,5 +1,0 @@
-Wheel
-Flask
-pymongo
-uWSGI
-virtualenv

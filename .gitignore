@@ -6,3 +6,5 @@ kubernetes/.secrets
 terraform/.terraform
 terraform/.terraform.lock.hcl
 terraform/terraform.tfstate*
+app/.venv
+sql-app/.venv
