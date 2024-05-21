@@ -28,6 +28,7 @@ services:
       - VAULT_CLUSTER_INFO
     environment:
       VAULT_ADDR: http://vault_server_demo:8200
+      VAULT_TOKEN: '123'
       SQL_USER: sa
       MSSQL_SA_PASSWORD: MyStrongPassword10
     command: /bin/bash -c "echo 'Initializing Demo' && sleep 15 && /usr/local/bin/ubuntu_init/ubuntu_init.sh"
