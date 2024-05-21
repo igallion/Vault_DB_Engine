@@ -13,7 +13,8 @@ services:
       DB_SA_USER: sa
       DB_SA_PASSWORD: MyStrongPassword10
       VAULT_ADDR: http://vault_server_demo:8200
-      VAULT_TOKEN: '123'
+      VAULT_USER: appuser
+      VAULT_PASS: changeme
   myubuntu:
     image: my_ubuntu:1.2
     container_name: my_ubuntu
@@ -35,11 +36,7 @@ services:
     container_name: vault_server_demo
     ports:
       - "8200:8200/tcp"
-    #volumes:
-    #  - ./vaultConfig:/vault/config # Bind mount for configuration
-    #  - vault_data_volume:/vault/file # Named volume for Vault data
     environment:
-      #VAULT_LOCAL_CONFIG: /vault/config/vault-config.json
       VAULT_ADDR: http://0.0.0.0:8200
     cap_add:
       - IPC_LOCK
@@ -65,7 +62,6 @@ services:
 volumes:
   vault-mssql-data-2022:
     driver: local
-  #vault_data_volume:
 
 secrets:
   VAULT_CLUSTER_INFO:

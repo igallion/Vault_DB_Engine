@@ -6,16 +6,33 @@ import requests
 
 def read_vault_dbsecret(role_name):
     # Assuming the environment variables are set in your system
-    VAULT_TOKEN = os.getenv('VAULT_TOKEN')
     VAULT_ADDR = os.getenv('VAULT_ADDR')
+    VAULT_USER = os.getenv('VAULT_USER')
+    VAULT_PASS = os.getenv('VAULT_PASS')
 
     # Set environment for the subprocess
     env = os.environ.copy()
-    env['VAULT_TOKEN'] = VAULT_TOKEN
+    env['VAULT_USER'] = VAULT_USER
+    env['VAULT_PASS'] = VAULT_PASS
     env['VAULT_ADDR'] = VAULT_ADDR
 
+    # Vault command to login with appuser credentials
+    command = [f"vault", "login", "-format=json", "-method=userpass", "username={VAULT_USER}", "password={VAULT_PASS}"]
+
+    # Execute the command
+    try:
+        result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
+        # Parse JSON output
+        vault_creds = json.loads(result.stdout)
+        env['VAULT_TOKEN'] = vault_creds['auth']['client_token']
+    except subprocess.CalledProcessError as e:
+        print("Failed to execute command:", e)
+        print(e.stderr)
+    except json.JSONDecodeError as e:
+        print("Failed to parse JSON:", e)
+
+    # Vault command to read db credentials
     endpoint = "database/creds/" + role_name
-    # Vault command to execute
     command = ["vault", "read", "-format=json", endpoint]
 
     # Execute the command
