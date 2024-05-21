@@ -7,7 +7,7 @@ WORKDIR /sql-app
 COPY requirements.txt /sql-app/
 
 RUN apt-get update && \
-    apt-get install -y curl gnupg python3-dev build-essential libpcre3 libpcre3-dev unixodbc unixodbc-dev g++ \
+    apt-get install -y wget unzip curl gnupg python3-dev build-essential libpcre3 libpcre3-dev unixodbc unixodbc-dev g++ \
     && curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
     && curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
