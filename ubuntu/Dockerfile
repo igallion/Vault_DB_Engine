@@ -24,7 +24,8 @@ ENV PATH="$PATH:/opt/mssql-tools18/bin"
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY terraform/auth.tf terraform/main.tf terraform/policies.tf terraform/secrets.tf terraform/policies/ /root/terraform/
+COPY terraform/auth.tf terraform/main.tf terraform/policies.tf terraform/secrets.tf  /root/terraform/
 
+COPY terraform/policies/ /root/terraform/policies
 # Command to keep the container running (optional)
 CMD ["tail", "-f", "/dev/null"]
