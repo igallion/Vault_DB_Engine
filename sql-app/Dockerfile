@@ -15,6 +15,6 @@ RUN apt-get update && \
 
 RUN pip3 install --no-cache -r requirements.txt
 
-COPY sql.py /sql-app/
+COPY app.py vault.py /sql-app/
 
-CMD ["python3", "sql.py"]
+CMD ["python3", "app.py"]
