@@ -20,6 +20,8 @@ services:
       - mssql
     volumes:
       - ./ubuntu_init:/usr/local/bin/ubuntu_init
+      - ../terraform:/root/terraform/
+      - ../terraform/policies:/root/terraform/policies/
     secrets:
       - VAULT_CLUSTER_INFO
     environment:

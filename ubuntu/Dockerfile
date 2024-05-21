@@ -15,6 +15,9 @@ RUN apt-get update \
 RUN wget https://releases.hashicorp.com/vault/1.16.2/vault_1.16.2_linux_amd64.zip \
     && unzip vault_1.16.2_linux_amd64.zip -d /usr/local/bin/
 
+RUN wget https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.3_linux_amd64.zip \
+    && unzip terraform_1.8.3_linux_amd64.zip -d /usr/local/bin/
+
 # Optional: Add SQLCMD to the PATH
 ENV PATH="$PATH:/opt/mssql-tools18/bin"
 
