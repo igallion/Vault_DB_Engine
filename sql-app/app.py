@@ -3,10 +3,6 @@ import pyodbc
 import os
 import time
 
-roleName = "mssql-role"
-print("Requesting database credentials from Vault")
-creds = read_vault_dbsecret(roleName)
-
 def connect_sql(USERNAME, PASSWORD):
     SERVER = os.getenv('DB_SERVER')
     DATABASE = os.getenv('DB_DATABASE')
@@ -33,32 +29,17 @@ def connect_sql(USERNAME, PASSWORD):
     cursor.close()
     conn.close()
 
-print("######### Connection 1 #############")
-try:
-    resp1 = connect_sql(creds['data']['username'], creds['data']['password'])
-except pyodbc.InterfaceError as e:
-    print(f"Failed to connect to database: {str(e)}")
+while True:
+    roleName = "mssql-role"
+    print("Requesting database credentials from Vault")
     creds = read_vault_dbsecret(roleName)
-    resp1 = connect_sql(creds['data']['username'], creds['data']['password'])
-time.sleep(2)
-print(resp1)
 
-print("######### Connection 2 #############")
-try:
-    resp2 = connect_sql(creds['data']['username'], creds['data']['password'])
-except pyodbc.InterfaceError as e:
-    print(f"Failed to connect to database: {str(e)}")
-    creds = read_vault_dbsecret(roleName)
-    resp2 = connect_sql(creds['data']['username'], creds['data']['password'])
-time.sleep(6)
-print(resp2)
-
-print("######### Connection 3 #############")
-try:
-    resp3 = connect_sql(creds['data']['username'], creds['data']['password'])
-except pyodbc.InterfaceError as e:
-    print(f"Failed to connect to database: {str(e)}")
-    creds = read_vault_dbsecret(roleName)
-    resp3 = connect_sql(creds['data']['username'], creds['data']['password'])
-time.sleep(6)
-print(resp3)
+    print("######### Connection #############")
+    try:
+        resp1 = connect_sql(creds['data']['username'], creds['data']['password'])
+    except pyodbc.InterfaceError as e:
+        print(f"Failed to connect to database: {str(e)}")
+        creds = read_vault_dbsecret(roleName)
+        resp1 = connect_sql(creds['data']['username'], creds['data']['password'])
+    print(resp1)
+    time.sleep(5) 
