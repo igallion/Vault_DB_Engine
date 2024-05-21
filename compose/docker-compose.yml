@@ -12,7 +12,7 @@ services:
       DB_DATABASE: Test_database
       DB_SA_USER: sa
       DB_SA_PASSWORD: MyStrongPassword10
-      VAULT_ADDR: 'http://0.0.0.0:8200'
+      VAULT_ADDR: http://vault_server_demo:8200
       VAULT_TOKEN: '123'
   myubuntu:
     image: my_ubuntu:1.2
