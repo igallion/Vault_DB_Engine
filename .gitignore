@@ -3,8 +3,8 @@ compose/.secrets
 test
 .DS_Store
 kubernetes/.secrets
-terraform/.terraform
-terraform/.terraform.lock.hcl
-terraform/terraform.tfstate*
+ubuntu/terraform/.terraform
+ubuntu/terraform/.terraform.lock.hcl
+ubuntu/terraform/terraform.tfstate*
 app/.venv
 sql-app/.venv
