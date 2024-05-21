@@ -17,6 +17,13 @@ else
     echo "Unexpected value for SEALED: '$SEALED'"
 fi
 
+echo "Initializing Terraform"
+cd /root/terraform
+terraform init
+
+echo "Configuring Vault"
+terraform apply -auto-approve
+
 echo "Initializing SQL database"
 sqlcmd -C -U $SQL_USER -P $MSSQL_SA_PASSWORD -S mssql_vault_server_demo -i /usr/local/bin/ubuntu_init/configure.sql
 
