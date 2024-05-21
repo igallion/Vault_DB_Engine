@@ -30,4 +30,9 @@ terraform apply -auto-approve
 echo "Initializing SQL database"
 sqlcmd -C -U $SQL_USER -P $MSSQL_SA_PASSWORD -S mssql_vault_server_demo -i /usr/local/bin/ubuntu_init/configure.sql
 
-tail -f /dev/null
+#List users in database while demo is running
+while true; do 
+    echo "Listing users in database"
+    sqlcmd -C -U $SQL_USER -P $MSSQL_SA_PASSWORD -S mssql_vault_server_demo -i /usr/local/bin/ubuntu_init/userList.sql
+    sleep 5
+done
