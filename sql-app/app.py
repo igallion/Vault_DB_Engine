@@ -29,6 +29,8 @@ def connect_sql(USERNAME, PASSWORD):
     cursor.close()
     conn.close()
 
+print("Waiting for demo to initialize...")
+time.sleep(30)
 while True:
     roleName = "mssql-role"
     print("Requesting database credentials from Vault")

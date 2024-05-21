@@ -29,7 +29,7 @@ services:
       VAULT_TOKEN: '123'
       SQL_USER: sa
       MSSQL_SA_PASSWORD: MyStrongPassword10
-    command: /bin/bash -c "echo 'Initializing Demo' && sleep 15 && /usr/local/bin/ubuntu_init/ubuntu_init.sh"
+    command: /bin/bash -c "/usr/local/bin/ubuntu_init/ubuntu_init.sh"
   vault:
     image: hashicorp/vault:1.16
     container_name: vault_server_demo
