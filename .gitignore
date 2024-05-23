@@ -6,5 +6,4 @@ kubernetes/.secrets
 ubuntu/terraform/.terraform
 ubuntu/terraform/.terraform.lock.hcl
 ubuntu/terraform/terraform.tfstate*
-app/.venv
 sql-app/.venv
