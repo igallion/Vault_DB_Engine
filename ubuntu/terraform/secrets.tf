@@ -8,6 +8,44 @@ resource "vault_mount" "db" {
   type = "database"
 }
 
+#KV-V1 store for Business Unit 1
+resource "vault_mount" "kvv1-BU1" {
+  path        = "BusinessUnit1"
+  type        = "kv"
+  options     = { version = "1" }
+  description = "KVV1 secrets mount for Business Unit 1"
+}
+
+#DB information for sql-app
+resource "vault_kv_secret" "secret-BU1" {
+  path = "${vault_mount.kvv1-BU1.path}/sql-app/dev/dbinfo"
+  data_json = jsonencode(
+    {
+      db_server   = "mssql_vault_server_demo",
+      db_database = "Test_database"
+    }
+  )
+}
+
+#KV-V1 store for Business Unit 1
+resource "vault_mount" "kvv1-BU2" {
+  path        = "BusinessUnit2"
+  type        = "kv"
+  options     = { version = "1" }
+  description = "KVV1 secrets mount for Business Unit 2"
+}
+
+#DB information for sql-app
+resource "vault_kv_secret" "secret-BU2" {
+  path = "${vault_mount.kvv1-BU2.path}/oracle-app/dev/dbinfo"
+  data_json = jsonencode(
+    {
+      db_server   = "oracle_vault_server_demo",
+      db_database = "Test_database"
+    }
+  )
+}
+
 resource "vault_database_secret_backend_connection" "mssql" {
   backend           = vault_mount.db.path
   name              = "Test_database"
@@ -18,7 +56,7 @@ resource "vault_database_secret_backend_connection" "mssql" {
     connection_url          = "sqlserver://{{username}}:{{password}}@mssql_vault_server_demo"
     max_open_connections    = 5
     max_idle_connections    = 3
-    max_connection_lifetime = 5
+    max_connection_lifetime = 10
 
     username = "sa"
     password = "MyStrongPassword10"

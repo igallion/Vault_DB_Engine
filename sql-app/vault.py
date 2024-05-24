@@ -17,7 +17,9 @@ def read_vault_dbsecret(role_name):
     env['VAULT_ADDR'] = VAULT_ADDR
 
     # Vault command to login with appuser credentials
-    command = [f"vault", "login", "-format=json", "-method=userpass", "username={VAULT_USER}", "password={VAULT_PASS}"]
+    command = [f"vault", "login", "-format=json", "-method=userpass", f"username={VAULT_USER}", f"password={VAULT_PASS}"]
+    
+    print(f"Logging in to vault using userpass auth: {command}")
 
     # Execute the command
     try:

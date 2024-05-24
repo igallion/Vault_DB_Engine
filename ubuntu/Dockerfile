@@ -24,6 +24,8 @@ ENV PATH="$PATH:/opt/mssql-tools18/bin"
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+COPY ubuntu_init /usr/local/bin/ubuntu_init/
+
 COPY terraform/auth.tf terraform/main.tf terraform/policies.tf terraform/secrets.tf  /root/terraform/
 
 COPY terraform/policies/ /root/terraform/policies

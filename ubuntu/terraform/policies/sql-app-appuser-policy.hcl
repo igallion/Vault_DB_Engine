@@ -1,4 +1,4 @@
-# Read and list keys under database/app1/ secrets engine 
+# Read and list credentials under database/creds/mssql-role role 
 path "database/creds/mssql-role" {
   capabilities = ["read", "list"]
 }

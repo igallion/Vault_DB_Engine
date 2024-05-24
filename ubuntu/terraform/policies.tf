@@ -2,10 +2,9 @@
 # Create policies
 #---------------------
 
-# Create 'training' policy
 resource "vault_policy" "appuser-policy" {
-  name   = "appuser-policy"
-  policy = file("policies/appuser-policy.hcl")
+  name   = "sql-app-appuser-policy"
+  policy = file("policies/sql-app-appuser-policy.hcl")
 }
 
 resource "vault_policy" "admin-policy" {

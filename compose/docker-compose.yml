@@ -21,8 +21,6 @@ services:
     depends_on:
       - vault
       - mssql
-    volumes:
-      - ./ubuntu_init:/usr/local/bin/ubuntu_init
     secrets:
       - VAULT_CLUSTER_INFO
     environment:
