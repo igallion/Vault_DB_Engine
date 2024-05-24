@@ -8,8 +8,6 @@ services:
       - mssql
       - myubuntu
     environment:
-      DB_SERVER: mssql_vault_server_demo
-      DB_DATABASE: Test_database
       DB_SA_USER: sa
       DB_SA_PASSWORD: MyStrongPassword10
       VAULT_ADDR: http://vault_server_demo:8200
@@ -55,11 +53,11 @@ services:
       - 1434:1434/udp
     secrets:
       - mssql_sa_password
-    volumes:
-      - vault-mssql-data-2022:/var/opt/mssql/data
-volumes:
-  vault-mssql-data-2022:
-    driver: local
+    #volumes:
+    #  - vault-mssql-data-2022:/var/opt/mssql/data
+#volumes:
+#  vault-mssql-data-2022:
+#    driver: local
 
 secrets:
   VAULT_CLUSTER_INFO:
