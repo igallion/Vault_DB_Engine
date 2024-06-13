@@ -8,7 +8,7 @@ dsn = '192.168.0.237:1521/FREEPDB1'  # This is the Data Source Name or TNS (e.g.
 
 try:
     # Establish the database connection
-    connection = cx_Oracle.connect(username, password, dsn)
+    connection = cx_Oracle.connect(username, password, dsn, mode=cx_Oracle.SYSDBA)
     print("Successfully connected to the database")
 
     # Create a cursor
@@ -16,9 +16,11 @@ try:
 
     # Execute a sample query
     cursor.execute("SELECT * FROM location")
-
+    rows = cursor.fetchall()
     # Fetch and print the results
-    for row in cursor:
+    print(rows)
+    print("Listing location table")
+    for row in rows:
         print(row)
 
 except cx_Oracle.DatabaseError as e:
