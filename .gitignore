@@ -7,3 +7,4 @@ ubuntu/terraform/.terraform
 ubuntu/terraform/.terraform.lock.hcl
 ubuntu/terraform/terraform.tfstate*
 sql-app/.venv
+oracle-app/.venv
