@@ -11,3 +11,8 @@ resource "vault_policy" "admin-policy" {
   name   = "admin-policy"
   policy = file("policies/admin-policy.hcl")
 }
+
+resource "vault_policy" "py-policy" {
+  name   = "py-policy"
+  policy = file("policies/py-policy.hcl")
+}
