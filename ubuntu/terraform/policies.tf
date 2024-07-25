@@ -13,6 +13,6 @@ resource "vault_policy" "admin-policy" {
 }
 
 resource "vault_policy" "ig-mypy-dev-policy" {
-  name   = "ig-py-dev-policy"
+  name   = "ig-mypy-dev-policy"
   policy = file("policies/ig-mypy-dev-policy.hcl")
 }
