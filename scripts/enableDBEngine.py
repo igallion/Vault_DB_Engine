@@ -15,7 +15,7 @@ env = 'dev'.lower()
 #DB info
 username = 'sa'
 password = 'MyStrongPassword10'
-db_Server = 'mssql_vault_server_demo'
+db_Server = '192.168.0.237'
 db_Name = 'Test_database'
 db_Type = 'mssql'
 db_Info = {
@@ -29,6 +29,8 @@ db_Engine_name = mount_point
 db_Connection_name = f'{env}{db_Name}'
 role_Name = f'{team}{env}{db_Name}'
 policy_Name = f"{team}-{app_Name}-{env}-policy"
+password_Policy = 'pyDB-password-policy'
+username_Template = 'VLT_{{printf "%s_%s" (.RoleName) (random 20) | uppercase | truncate 26}}'
 
 #Establish client connection to vault
 client = hvac.Client(
@@ -73,6 +75,8 @@ if not db_Connections or db_Connection_name not in db_Connections['data']['keys'
         plugin_name=db_Info[db_Type]['plugin-name'],
         allowed_roles=role_Name,
         connection_url=db_Info[db_Type]['connection-string'],
+        username_template=username_Template,
+        password_policy=password_Policy,
         username=username,
         password=password
     )
@@ -136,7 +140,7 @@ path "{db_Engine_name}/creds/{role_Name}" {{
 '''
 
 #Read existing policy from vault
-policy = client.sys.read_policy(name='py-policy')['data']['rules']
+policy = client.sys.read_policy(name=policy_Name)['data']['rules']
 
 if pyDB_Policy not in policy:
     #Append db policy to existing policy, write back to vault
@@ -147,7 +151,7 @@ if pyDB_Policy not in policy:
     print(new_Policy)
 
     client.sys.create_or_update_policy(
-        name='py-policy',
+        name=policy_Name,
         policy=new_Policy
     )
 else:

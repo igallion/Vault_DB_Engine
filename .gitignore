@@ -10,3 +10,4 @@ sql-app/.venv
 oracle-app/.venv
 scripts/.venv
 compose/vault-plugin-database*
+scripts/vaultTest.py
