@@ -17,7 +17,7 @@ resource "vault_policy" "ig-mypy-dev-policy" {
   policy = file("policies/ig-mypy-dev-policy.hcl")
 }
 
-resource "vault_policy" "pyDB-password-policy" {
+resource "vault_password_policy" "pyDB-password-policy" {
   name   = "ig-mypy-dev-policy"
   policy = file("policies/pyDB-password-policy.hcl")
 }
