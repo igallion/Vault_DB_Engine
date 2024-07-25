@@ -18,6 +18,6 @@ resource "vault_policy" "ig-mypy-dev-policy" {
 }
 
 resource "vault_password_policy" "pyDB-password-policy" {
-  name   = "ig-mypy-dev-policy"
+  name   = "pyDB-password-policy"
   policy = file("policies/pyDB-password-policy.hcl")
 }
