@@ -14,7 +14,7 @@ resource "vault_generic_endpoint" "appuser" {
 
   data_json = <<EOT
 {
-  "policies": ["sql-app-appuser-policy", "py-policy"],
+  "policies": ["sql-app-appuser-policy", "ig-mypy-dev-policy"],
   "password": "changeme"
 }
 EOT
