@@ -115,14 +115,20 @@ except hvac.exceptions.InvalidPath as e:
 if not role_list or role_Name not in role_list['keys']:
     print(f"Creating role {role_Name}")
 
-    #Create db role
-    with open('test.sql', 'r') as sql_file:
-        creation_statements = (sql_file.read()).split('\n')
+    #Read creation sql script - escape JSON special characters, place in single element json list
+    with open('create.sql', 'r') as sql_file:
+        #creation_statements = (sql_file.read()).split('\n')
+        creation_statements = f'[{json.dumps(sql_file.read())}]'
+
+    #Read revocation sql script - escape JSON special characters, place in single element json list
+    with open('revoke.sql', 'r') as sql_file:
+        revocation_statements = f'[{json.dumps(sql_file.read())}]'
 
     client.secrets.database.create_role(
         name = role_Name,
         db_name = db_Connection_name,
         creation_statements=creation_statements,
+        revocation_statements=[revocation_statements],
         default_ttl='24h',
         max_ttl='48h',
         mount_point=db_Engine_name
