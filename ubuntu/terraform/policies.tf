@@ -8,6 +8,11 @@ resource "vault_policy" "appuser-dev-policy" {
 }
 
 resource "vault_policy" "appuser-qa-policy" {
+  name   = "ig-mypy-dev-policy"
+  policy = file("policies/ig-mypy-dev-policy.hcl")
+}
+
+resource "vault_policy" "appuser-qa-policy" {
   name   = "ig-mypy-qa-policy"
   policy = file("policies/ig-mypy-qa-policy.hcl")
 }
