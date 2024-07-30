@@ -2,12 +2,12 @@
 # Create policies
 #---------------------
 
-resource "vault_policy" "appuser-dev-policy" {
+resource "vault_policy" "appuser-sql-app-dev-policy" {
   name   = "sql-app-dev-appuser-policy"
   policy = file("policies/sql-app-dev-appuser-policy.hcl")
 }
 
-resource "vault_policy" "appuser-qa-policy" {
+resource "vault_policy" "appuser-dev-policy" {
   name   = "ig-mypy-dev-policy"
   policy = file("policies/ig-mypy-dev-policy.hcl")
 }
