@@ -61,3 +61,28 @@ resource "vault_generic_endpoint" "adminuser" {
 }
 EOT
 }
+
+resource "vault_auth_backend" "userpass2" {
+  type        = "userpass"
+  path        = "userpass2" # Optional; this is the default path
+  description = "Userpass2 auth backend"
+  tune {
+    default_lease_ttl = "10s"
+    max_lease_ttl     = "10s"
+  }
+
+}
+
+# Create a user, 'appuserdev2'
+resource "vault_generic_endpoint" "appuserdev2" {
+  depends_on           = [vault_auth_backend.userpass2]
+  path                 = "auth/userpass2/users/appuserdev2"
+  ignore_absent_fields = true
+
+  data_json = <<EOT
+{
+  "policies": ["sql-app-dev-appuser-policy", "ig-mypy-dev-policy"],
+  "password": "changeme"
+}
+EOT
+}

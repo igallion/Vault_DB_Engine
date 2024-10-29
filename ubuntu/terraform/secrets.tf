@@ -50,7 +50,7 @@ resource "vault_database_secret_backend_connection" "mssql" {
   backend           = vault_mount.db.path
   name              = "Test_database"
   verify_connection = true
-  allowed_roles     = ["mssql-role"]
+  allowed_roles     = ["mssql-role", "mssql-role2"]
 
   mssql {
     connection_url          = "sqlserver://{{username}}:{{password}}@mssql_vault_server_demo"
@@ -78,4 +78,21 @@ resource "vault_database_secret_backend_role" "mssql-role" {
   default_ttl = 5
   #90 Seconds
   max_ttl = 10
+}
+
+resource "vault_database_secret_backend_role" "mssql-role2" {
+  backend = vault_mount.db.path
+  name    = "mssql-role2"
+  db_name = vault_database_secret_backend_connection.mssql.name
+
+  creation_statements = [
+    "USE [Test_database]",
+    "CREATE LOGIN [{{name}}] WITH PASSWORD = '{{password}}';",
+    "CREATE USER [{{name}}] FOR LOGIN [{{name}}];",
+    "EXEC sp_addrolemember db_datareader, [{{name}}];"
+  ]
+  #90 Seconds
+  default_ttl = 60
+  #90 Seconds
+  max_ttl = 60
 }
