@@ -96,3 +96,13 @@ resource "vault_database_secret_backend_role" "mssql-role2" {
   #90 Seconds
   max_ttl = 60
 }
+
+resource "vault_quota_rate_limit" "db-rate-limit" {
+  name           = "db-rate-limit"
+  path           = "database/creds/mssql-role"
+  rate           = 5
+  interval       = 10
+  block_interval = 30
+
+  depends_on = [vault_database_secret_backend_role.mssql-role]
+}
