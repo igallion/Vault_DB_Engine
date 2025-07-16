@@ -12,11 +12,11 @@ RUN apt-get update \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y mssql-tools18
 
-RUN wget https://releases.hashicorp.com/vault/1.16.2/vault_1.16.2_linux_amd64.zip \
-    && unzip vault_1.16.2_linux_amd64.zip -d /usr/local/bin/
+RUN wget https://releases.hashicorp.com/vault/1.20.0/vault_1.20.0_linux_amd64.zip \
+    && unzip -o vault_1.20.0_linux_amd64.zip -d /usr/local/bin/
 
 RUN wget https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.3_linux_amd64.zip \
-    && unzip terraform_1.8.3_linux_amd64.zip -d /usr/local/bin/
+    && unzip -o terraform_1.8.3_linux_amd64.zip -d /usr/local/bin/
 
 # Optional: Add SQLCMD to the PATH
 ENV PATH="$PATH:/opt/mssql-tools18/bin"
@@ -26,7 +26,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY ubuntu_init /usr/local/bin/ubuntu_init/
 
-COPY terraform/auth.tf terraform/main.tf terraform/policies.tf terraform/secrets.tf terraform/audit.tf  /root/terraform/
+COPY terraform/auth.tf terraform/main.tf terraform/policies.tf terraform/secrets.tf terraform/audit.tf terraform/pki.tf terraform/variables.tf /root/terraform/
 
 COPY terraform/policies/ /root/terraform/policies
 # Command to keep the container running (optional)
