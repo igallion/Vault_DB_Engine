@@ -103,3 +103,8 @@ path "sys/internal/ui/*" {
 path "sys/help/*" {
   capabilities = ["read"]
 }
+
+# Work with pki secrets engine
+path "pki*" {
+  capabilities = [ "create", "read", "update", "delete", "list", "sudo" ]
+}
