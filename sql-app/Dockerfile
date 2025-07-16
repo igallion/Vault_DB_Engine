@@ -15,8 +15,8 @@ RUN apt-get update && \
 
 RUN pip3 install --no-cache -r requirements.txt
 
-RUN wget https://releases.hashicorp.com/vault/1.16.2/vault_1.16.2_linux_amd64.zip \
-    && unzip vault_1.16.2_linux_amd64.zip -d /usr/local/bin/
+RUN wget https://releases.hashicorp.com/vault/1.20.0/vault_1.20.0_linux_amd64.zip \
+    && unzip -o vault_1.20.0_linux_amd64.zip -d /usr/local/bin/
 
 COPY app.py vault.py /sql-app/
 
