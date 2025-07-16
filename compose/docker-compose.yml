@@ -3,6 +3,8 @@ services:
   sqlapp:
     image: sql-app:1.0
     container_name: sql-app
+    ports:
+      - "80:80/tcp"
     depends_on:
       - vault
       - mssql
@@ -53,11 +55,6 @@ services:
       - 1434:1434/udp
     secrets:
       - mssql_sa_password
-    #volumes:
-    #  - vault-mssql-data-2022:/var/opt/mssql/data
-#volumes:
-#  vault-mssql-data-2022:
-#    driver: local
 
 secrets:
   VAULT_CLUSTER_INFO:

@@ -11,3 +11,8 @@ oracle-app/.venv
 scripts/.venv
 compose/vault-plugin-database*
 scripts/vaultTest.py
+sql-app/__pycache__
+ubuntu/terraform/*.csr
+ubuntu/terraform/*.pem
+ubuntu/terraform/*.crt
+sql-app/test

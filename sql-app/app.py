@@ -1,45 +1,81 @@
-from vault import read_vault_dbsecretAPI, read_vault_dbsecret, read_vault_kvv1
 import pyodbc
 import os
 import time
+from fastapi import FastAPI, Response, status, HTTPException
+import hvac
+import logging
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+#Connects to SQL DB and retrieves information from location table
 def connect_sql(USERNAME, PASSWORD, SERVER, DATABASE):
-    print("Connecting to database with credentials:")
-    print(f"Database Server {SERVER}:{DATABASE}")
-    print(f"Username: {USERNAME} - Password: {PASSWORD}")
+    logger.info("Connecting to database with credentials:")
+    logger.info(f"Database Server {SERVER}:{DATABASE}")
+    logger.info(f"Username: {USERNAME} - Password: {PASSWORD}")
 
     connectionString = f'DRIVER={{ODBC Driver 18 for SQL Server}};DATABASE={DATABASE};SERVER={SERVER};UID={USERNAME};PWD={PASSWORD};Encrypt=no'
-    print(f"Connection String: {connectionString}")
+    logger.info(f"Connection String: {connectionString}")
     conn = pyodbc.connect(connectionString)
     cursor = conn.cursor()
     SQL_QUERY = "SELECT * FROM location"
-    print(f"Running query: {SQL_QUERY}")
+    logger.info(f"Running query: {SQL_QUERY}")
     cursor.execute(SQL_QUERY)
-    rows = cursor.fetchall()
+    resp = cursor.fetchall()
 
-    for row in rows:
-        print(row)
-
-    print("Closing connection to database")
+    logger.info("Closing connection to database")
     cursor.close()
     conn.close()
+    return resp
 
-print("Waiting for demo to initialize...")
-time.sleep(30)
-while True:
+#Main SQL app
+def sql_app():
     roleName = "mssql-role"
-    print("Requesting database credentials from Vault")
-    creds = read_vault_dbsecret(roleName)
-    print("Requesting DB Server and Database name from Vault")
-    dbInfo = read_vault_kvv1("BusinessUnit1", "sql-app/dev/dbinfo")
-    print(f"DB info: Server {dbInfo['data']['db_server']} Database Name: {dbInfo['data']['db_database']}")
+    db_mount_point = 'database'
+    logger.info("Requesting database credentials from Vault")
+    creds = vault_client.secrets.database.generate_credentials(
+        name = roleName,
+        mount_point = db_mount_point
+    )
+    
+    logger.info("Requesting DB Server and Database name from Vault")
+    dbInfo = vault_client.secrets.kv.v1.read_secret(
+        path = 'sql-app/dev/dbinfo',
+        mount_point = 'BusinessUnit1'
+    )
+    logger.info(f"DB info: Server {dbInfo['data']['db_server']} Database Name: {dbInfo['data']['db_database']}")
 
-    print("######### Connection #############")
+    logger.info("######### Connection #############")
     try:
         resp1 = connect_sql(creds['data']['username'], creds['data']['password'], dbInfo['data']['db_server'], dbInfo['data']['db_database'])
     except pyodbc.InterfaceError as e:
-        print(f"Failed to connect to database: {str(e)}")
-        creds = read_vault_dbsecret(roleName)
-        resp1 = connect_sql(creds['data']['username'], creds['data']['password'], dbInfo['data']['db_server'], dbInfo['data']['db_database'])
-    print(resp1)
-    time.sleep(5) 
+        logger.error(f"Failed to connect to database: {str(e)}")
+    return resp1
+
+app = FastAPI()
+
+#Initialize connection to Vault
+VAULT_ADDR = os.getenv('VAULT_ADDR')
+VAULT_USER = os.getenv('VAULT_USER')
+VAULT_PASS = os.getenv('VAULT_PASS')
+
+vault_client = hvac.Client(
+    url = VAULT_ADDR
+)
+
+vault_client.auth.userpass.login(
+    username = VAULT_USER,
+    password = VAULT_PASS
+)
+
+#Define api routes
+@app.get("/")
+def read_root():
+    logger.info("Returning message")
+    return {"Message": "Hello World"}
+
+@app.get("/sql-app", status_code=200)
+def get_sql_app(response: Response):
+    resp = sql_app()
+    logger.info(f"Returning response: {resp}")
+    return {"message": f"{resp}"}

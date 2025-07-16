@@ -4,6 +4,8 @@ FROM python:3.12.2-slim-bullseye
 
 WORKDIR /sql-app
 
+EXPOSE 80
+
 COPY requirements.txt /sql-app/
 
 RUN apt-get update && \
@@ -20,4 +22,4 @@ RUN wget https://releases.hashicorp.com/vault/1.20.0/vault_1.20.0_linux_amd64.zi
 
 COPY app.py vault.py /sql-app/
 
-CMD ["python3", "app.py"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
