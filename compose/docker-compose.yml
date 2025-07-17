@@ -3,12 +3,24 @@ services:
   sqlapp:
     image: ghcr.io/igallion/sql-app:main
     container_name: sql-app
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://vault_server_demo:8200/v1/sys/health?standbyok=true"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 10s
     ports:
       - "80:80/tcp"
     depends_on:
-      - vault
-      - mssql
-      - myubuntu
+      vault: 
+        condition: service_started
+      mssql:
+        condition: service_healthy
+      myubuntu:
+        condition: service_started
     environment:
       DB_SA_USER: sa
       DB_SA_PASSWORD: MyStrongPassword10
@@ -30,30 +42,30 @@ services:
   vault:
     image: hashicorp/vault:1.20
     container_name: vault_server_demo
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/v1/sys/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
     ports:
       - "8200:8200/tcp"
     environment:
       VAULT_ADDR: http://0.0.0.0:8200
     cap_add:
       - IPC_LOCK
+    depends_on:
+      mssql:
+        condition: service_healthy   
     entrypoint: "vault server -dev -dev-root-token-id=123 -dev-listen-address=0.0.0.0:8200"
     restart: unless-stopped
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: mssql_vault_server_demo
     user: root
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -Usa -PMyStrongPassword10 -C -Q 'select 1'"]
+      interval: 1s
+      timeout: 30s
+      retries: 20
     environment:
       MSSQL_SA_PASSWORD: MyStrongPassword10
       ACCEPT_EULA: "Y"
       MSSQL_PID: Evaluation
-    depends_on:
-      - vault
     ports:
       - 1433:1433
       - 1434:1434/udp
