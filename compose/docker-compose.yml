@@ -2,6 +2,7 @@ version: "3"
 services:
   sqlapp:
     image: ghcr.io/igallion/sql-app:main
+    pull_policy: always
     container_name: sql-app
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://vault_server_demo:8200/v1/sys/health?standbyok=true"]
