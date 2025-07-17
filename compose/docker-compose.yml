@@ -1,7 +1,7 @@
 version: "3"
 services:
   sqlapp:
-    image: sql-app:1.0
+    image: ghcr.io/igallion/sql-app:main
     container_name: sql-app
     ports:
       - "80:80/tcp"
@@ -21,8 +21,6 @@ services:
     depends_on:
       - vault
       - mssql
-    secrets:
-      - VAULT_CLUSTER_INFO
     environment:
       VAULT_ADDR: http://vault_server_demo:8200
       VAULT_TOKEN: '123'
@@ -30,8 +28,14 @@ services:
       MSSQL_SA_PASSWORD: MyStrongPassword10
     command: /bin/bash -c "/usr/local/bin/ubuntu_init/ubuntu_init.sh"
   vault:
-    image: hashicorp/vault:1.16
+    image: hashicorp/vault:1.20
     container_name: vault_server_demo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/v1/sys/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     ports:
       - "8200:8200/tcp"
     environment:
@@ -53,11 +57,3 @@ services:
     ports:
       - 1433:1433
       - 1434:1434/udp
-    secrets:
-      - mssql_sa_password
-
-secrets:
-  VAULT_CLUSTER_INFO:
-    file: ./.secrets/VAULT_CLUSTER_INFO.json
-  mssql_sa_password:
-    file: ./.secrets/mssql_sa_password.txt
