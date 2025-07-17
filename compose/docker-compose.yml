@@ -56,10 +56,11 @@ services:
     restart: unless-stopped
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    pull_policy: always
     container_name: mssql_vault_server_demo
     user: root
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -Usa -PMyStrongPassword10 -C -Q 'select 1'"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -Usa -PMyStrongPassword10 -C -Q 'select 1'"]
       interval: 1s
       timeout: 30s
       retries: 20
