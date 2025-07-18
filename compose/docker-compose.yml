@@ -78,8 +78,6 @@ services:
     container_name: prometheus
     ports:
       - 9090:9090
-    depends_on:
-      - vault
 secrets:
   VAULT_USER:
     file: .secrets/VAULT_USER.txt
