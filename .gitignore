@@ -16,3 +16,4 @@ ubuntu/terraform/*.csr
 ubuntu/terraform/*.pem
 ubuntu/terraform/*.crt
 sql-app/test
+todo.txt

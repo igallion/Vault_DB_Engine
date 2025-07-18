@@ -49,6 +49,8 @@ services:
       VAULT_ADDR: http://0.0.0.0:8200
     cap_add:
       - IPC_LOCK
+    volumes:
+      - ./vault-config.hcl:/vault/config.d/vault-config.hcl
     depends_on:
       mssql:
         condition: service_healthy   
@@ -71,3 +73,17 @@ services:
     ports:
       - 1433:1433
       - 1434:1434/udp
+  prometheus:
+    image: my_prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    depends_on:
+      - vault
+secrets:
+  VAULT_USER:
+    file: .secrets/VAULT_USER.txt
+  VAULT_PASS:
+    file: .secrets/VAULT_PASS.txt
+  MSSQL_SA_PASSWORD:
+    file: .secrets/MSSQL_SA_PASSWORD.txt
