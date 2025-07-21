@@ -149,6 +149,20 @@ resource "vault_pki_secret_backend_role" "intermediate_role" {
 
 }
 
+resource "vault_pki_secret_backend_role" "intermediate_sql-app_role" {
+  backend            = vault_mount.pki_int.path
+  issuer_ref         = vault_pki_secret_backend_issuer.intermediate.issuer_ref
+  name               = "sql-app"
+  ttl                = 86400
+  max_ttl            = 2592000
+  allow_ip_sans      = true
+  key_type           = "rsa"
+  key_bits           = 4096
+  allowed_domains    = ["sql-app"]
+  allow_subdomains   = true
+  allow_bare_domains = true
+}
+
 #  step4: request new cert for URL
 #  vault write pki_int/issue/ilgallion-dot-com common_name="test.ilgallion.com" ttl="24h"
 
