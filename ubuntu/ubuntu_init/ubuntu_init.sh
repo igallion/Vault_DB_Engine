@@ -3,7 +3,6 @@ VAULT_UNSEAL_KEY=$(jq -r ".keys_base64[0]" "/run/secrets/VAULT_CLUSTER_INFO")
 #export VAULT_TOKEN=$(jq -r ".root_token" "/run/secrets/VAULT_CLUSTER_INFO")
 
 echo "Initializing Demo..."
-sleep 15
 
 SEALED=$(vault status -format=json | jq -r ".sealed")
 echo "### Vault Sealed Status: '$SEALED' ###"

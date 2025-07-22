@@ -12,3 +12,8 @@ path "database/creds/mssql-role2" {
 path "BusinessUnit1/sql-app/dev/*" {
   capabilities = ["read", "list"]
 }
+
+#Generate certs
+path "pki_int/issue/sql-app" {
+  capabilities = ["update"]
+}
