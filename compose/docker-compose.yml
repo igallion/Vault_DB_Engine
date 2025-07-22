@@ -14,7 +14,7 @@ services:
         condition: any
         delay: 10s
     ports:
-      - "80:80/tcp"
+      - "443:443/tcp"
     depends_on:
       vault: 
         condition: service_started
