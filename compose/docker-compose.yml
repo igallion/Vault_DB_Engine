@@ -74,8 +74,12 @@ services:
       - 1433:1433
       - 1434:1434/udp
   prometheus:
-    image: my_prometheus:latest
+    image: prom/prometheus
     container_name: prometheus
+    secrets:
+      - VAULT_TOKEN
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
 secrets:
@@ -85,3 +89,5 @@ secrets:
     file: .secrets/VAULT_PASS.txt
   MSSQL_SA_PASSWORD:
     file: .secrets/MSSQL_SA_PASSWORD.txt
+  VAULT_TOKEN:
+    file: .secrets/vault-token
