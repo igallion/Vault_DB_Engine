@@ -4,6 +4,8 @@ services:
     image: ghcr.io/igallion/sql-app:main
     pull_policy: always
     container_name: sql-app
+    volumes:
+      - ./sql-app-config.yml:/sql-app/config.yml
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://vault_server_demo:8200/v1/sys/health?standbyok=true"]
       interval: 10s
