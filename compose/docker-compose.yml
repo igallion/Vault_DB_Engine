@@ -1,4 +1,3 @@
-version: "3"
 services:
   sqlapp:
     image: ghcr.io/igallion/sql-app:main
@@ -31,7 +30,7 @@ services:
       VAULT_USER: appuserdev
       VAULT_PASS: changeme
   myubuntu:
-    image: my_ubuntu:1.2
+    image: my_ubuntu:latest
     container_name: my_ubuntu
     depends_on:
       - vault
