@@ -62,6 +62,8 @@ This project is a self contained environment with the following services:
 4. **prometheus**: Provides monitoring and metrics on Vault and sqlapp.
 5. **my_ubuntu**: Initializes the MSSQL database with test data and applies the Vault configuration via Terraform. Typically Terraform configurations would be applied in a CI/CD pipeline and the state file would be located in secure storage. However for the purposes of this demo, a container within the project handles this.
 
+### Vault
+
 When **docker-compose up** is run, the first service to start is mssql. Vault requires the database server to be up and available in order to create new users, and sqlapp depends on the database server to complete requests to its API. 
 
 Once the database service is online and available, Vault is initialized. The my_ubuntu container first applies the configuration defined in the **ubuntu/terraform** directory. This includes configuring the kvv1 secrets engines for each business unit, auth methods, policies, the database secrets engine and its associated database roles. These will all be used by sqlapp to retrieve connection details and new database credentials. A root and intermediate CA are also configured and roles are set up to allow applications to request SSL certificates from Vault.
@@ -81,6 +83,8 @@ v-userpass-appuserdev-mssql-role-m0fXFfMjH3PyYCCUlWYc-1753802672                
 
 (1 rows affected)
 ```
+
+### sqlapp
 
 Finally, after the database is initialized and Vault has started, sqlapp starts up. However, you may notice permission denied errors in the sqlapp logs:
 ```shell
@@ -127,6 +131,8 @@ def get_sql_app(response: Response):
     logger.info(f"Returning response: {resp}")
     return {"message": f"{resp}"}
 ```
+
+### Prometheus
 
 Finally, coming back to monitoring and metrics; Prometheus does not have any dependencies on the other services so it will start up right away. Throughout this guide Prometheus has been collecting metrics on both Vault and sqlapp. Browse to http://localhost:9090 then click **Status** > **Target health** to view the configured monitors:
 
