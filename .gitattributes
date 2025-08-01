@@ -1,0 +1,2 @@
+#Enforce LF line endings for ubuntu_init script
+ubuntu_init/ubuntu_init.sh text eol=lf

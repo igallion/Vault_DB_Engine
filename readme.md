@@ -10,28 +10,41 @@ This project is intended to be a showcase of how HashiCorp Vault can be integrat
 - Terraform-based Vault configuration and role setup
 
 ## Getting Started:
+If you haven't already, install Docker: https://docs.docker.com/get-started/get-docker/
+
 Clone this repository: 
 ```shell
 git clone https://github.com/igallion/Vault_DB_Engine.git
 ```
 
-Build the my_ubuntu image:
+Navigate into the project directory:
 ```shell
-cd ubuntu
-docker build -t my_ubuntu:latest .
+cd Vault_DB_Engine
 ```
 
-Start it up:
-```shell
-cd ../compose
+Run the init script:
 
-docker-compose up
+*nix systems:
+```shell
+./init.sh
+```
+
+Windows:
+```shell
+.\init.ps1
+```
+
+Navigate into the compose directory and start it up:
+```shell
+cd compose
+
+docker compose up
 ```
 
 You can check on the status of the containers using:
 
 ```shell
-docker-compose ps
+docker compose ps
 
 NAME                      IMAGE                                        COMMAND                  SERVICE      CREATED          STATUS                    PORTS
 mssql_vault_server_demo   mcr.microsoft.com/mssql/server:2022-latest   "/opt/mssql/bin/laun…"   mssql        48 seconds ago   Up 47 seconds (healthy)   0.0.0.0:1433->1433/tcp, [::]:1433->1433/tcp, 0.0.0.0:1434->1434/udp, [::]:1434->1434/udp
@@ -64,7 +77,7 @@ This project is a self contained environment with the following services:
 
 ### Vault
 
-When **docker-compose up** is run, the first service to start is mssql. Vault requires the database server to be up and available in order to create new users, and sqlapp depends on the database server to complete requests to its API. 
+When **docker compose up** is run, the first service to start is mssql. Vault requires the database server to be up and available in order to create new users, and sqlapp depends on the database server to complete requests to its API. 
 
 Once the database service is online and available, Vault is initialized. The my_ubuntu container first applies the configuration defined in the **ubuntu/terraform** directory. This includes configuring the kvv1 secrets engines for each business unit, auth methods, policies, the database secrets engine and its associated database roles. These will all be used by sqlapp to retrieve connection details and new database credentials. A root and intermediate CA are also configured and roles are set up to allow applications to request SSL certificates from Vault.
 
@@ -197,6 +210,11 @@ vault_quota_rate_limit_violation
 
 ![vault rate limit violations](/images/prometheus/vault-metrics-rate-limit-violation.png)
 
+## Cleanup
+Open a new terminal and navigate to the Vault_DB_Engine/compose directory then run:
+```shell
+docker compose down
+```
 
 ## Optimizations
 
